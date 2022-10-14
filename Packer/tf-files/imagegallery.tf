@@ -1,6 +1,6 @@
+
 data "azurerm_resource_group" "rg" {
   name     = "ranjith"
-  #location = "eastus"
 }
 
 resource "azurerm_shared_image_gallery" "sig" {
@@ -20,11 +20,14 @@ resource "azurerm_shared_image" "si" {
   gallery_name        = azurerm_shared_image_gallery.sig.name
   resource_group_name = data.azurerm_resource_group.rg.name
   location            = data.azurerm_resource_group.rg.location
-  os_type             = "Linux"
+  os_type             = "Windows"
 
   identifier {
     publisher = "PublisherName"
     offer     = "OfferName"
     sku       = "ExampleSku"
   }
+  depends_on = [
+    azurerm_shared_image_gallery.sig
+  ]
 }

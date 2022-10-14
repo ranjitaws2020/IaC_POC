@@ -53,7 +53,7 @@
 
 #   ip_configuration {
 #     name                          = "nicconfig"
-#     subnet_id                     = "azurerm_subnet.internal.id
+#     subnet_id                     = "azurerm_subnet.internal.id"
 #     private_ip_address_allocation = "static"
 #     private_ip_address            = cidrhost("10.100.2.16/24", 4)
 #   }
