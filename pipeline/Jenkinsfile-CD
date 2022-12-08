@@ -1,0 +1,34 @@
+@Library('shared-library') _
+pipeline {
+  agent any
+  environment {
+    azcon = credentials('azure-pasha')
+  }
+   
+   stages {   
+    
+    stage('Infra Provisioning') {
+      steps {
+        TerraformDestroy()
+      }
+    }
+    
+    stage('FetchPublicIP') {
+      steps {
+        FetchPublicIP()
+      }
+    }
+    stage('Download Artifact From Nexus') {
+      steps {
+        DownloadFromNexus()
+      }
+      }
+    stage('DeployToTomcat') {   
+      steps{
+        withCredentials([usernamePassword(credentialsId: 'vm-creds', passwordVariable: 'password', usernameVariable: 'username')]) {
+        DeployToTomcat(username, password)
+       }
+       }
+       }
+    }
+}
