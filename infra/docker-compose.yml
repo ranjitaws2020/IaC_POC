@@ -1,0 +1,14 @@
+version: '3.3'
+services:
+   sonarqube:
+     image: sonarqube:8.9-community
+     ports:
+       - 9000:9000
+   nexus:
+     image: sonatype/nexus3
+     ports:
+       - 8081:8081
+   jenkins:
+     image: jenkins/jenkins:latest
+     ports:
+       - 8080:8080

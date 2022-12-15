@@ -20,7 +20,7 @@ resource "azurerm_public_ip" "public_ip" {
   name                = "${var.prefix}_public_ip"
   resource_group_name = "ranjith"
   location            = "eastus"
-  allocation_method   = "Dynamic"
+  allocation_method   = "Static"
 }
 
 resource "azurerm_network_interface" "main" {
@@ -100,7 +100,7 @@ resource "azurerm_virtual_machine" "main" {
   }
 }
 
-resource "azurerm_virtual_machine_extension" "vm_extension_install_docker_images" {
+/*resource "azurerm_virtual_machine_extension" "vm_extension_install_docker_images" {
   name                 = "${var.prefix}-vm_extension_install_docker_images"
   virtual_machine_id   = azurerm_virtual_machine.main.id
   publisher            = "Microsoft.Azure.Extensions"
@@ -114,4 +114,33 @@ resource "azurerm_virtual_machine_extension" "vm_extension_install_docker_images
         }))}"
     }
 SETTINGS
+}*/
+
+
+resource "null_resource" remoteExecProvisionerWFolder {
+
+  provisioner "file" {
+    source      = "docker-compose.yml"
+    destination = "/home/azuser/docker-compose.yml"
+  }
+
+  provisioner "remote-exec" {
+    inline = [
+      "sudo docker-compose up -d"
+    ]
+  }
+
+  connection {
+    host     = "${azurerm_public_ip.public_ip.ip_address}"
+    type     = "ssh"
+    user     = "azuser"
+    password = "Arti@12345678"
+    agent    = "false"
+  }
+
+  depends_on=[
+    azurerm_virtual_machine.main,
+    azurerm_network_interface.main,
+    azurerm_public_ip.public_ip
+  ]
 }
