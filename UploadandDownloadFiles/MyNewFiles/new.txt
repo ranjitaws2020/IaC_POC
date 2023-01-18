@@ -1,0 +1,51 @@
+851ee2d4cf2bd08c90b77362b5fd3d6199235bdb
+
+NuGet API Key Nexus :  2bcfcfe0-5b00-38e1-9086-b9e67205f16d
+ sh "mvn -Dmaven.test.failure.ignore=true clean package"
+
+https://www.jenkins.io/blog/2017/02/07/declarative-maven-project/
+
+java-token
+
+
+ stage('Download Artifact Form Nexus') {
+            steps {
+                 powershell label:'', script:'wget --user=admin --password=admin http://localhost:8081/repository/java-mvn/com%2Fdev3l%2Fhello_world%2Fmvn-hello-world%2F1.0-SNAPSHOT%2Fmvn-hello-world-1.0-20230109.124107-1.war'
+            }
+        }
+
+
+
+powershell label:'', script:'Invoke-WebRequest -Method GET http://localhost:8081/repository/java-mvn/com/dev3l/hello_world/mvn-hello-world/1.0-SNAPSHOT/mvn-hello-world-1.0-20230109.132123-4.war 
+-ContentType application/json -OutFile javamaven.war -Credential ${nexuscred}'
+
+ powershell label:'', script:'Invoke-WebRequest -Method GET "http://localhost:8081/repository/java-mvn/com/dev3l/hello_world/mvn-hello-world/1.0-SNAPSHOT/mvn-hello-world-1.0-20230109.132123-4.war" 
+-ContentType "application/json" -OutFile javamaven.war -Credential ${nexuscred}'
+
+ powershell label:'', script:"Invoke-WebRequest -Method GET "http://localhost:8081/repository/java-mvn/com/dev3l/hello_world/mvn-hello-world/1.0-SNAPSHOT/mvn-hello-world-1.0-20230109.132123-4.war" 
+-ContentType "application/json" -OutFile javamaven.war -Credential ${nexuscred}"
+
+
+cred = new-object -typename System.Management.Automation.PSCredential -argumentlist $nexuscred_USR, $nexuscred_PSW
+
+-Headers @{ Authorization = "Basic "+ [System.Convert]::ToBase64String([System.Text.Encoding]::ASCII.GetBytes("$nexuscred_USR:$nexuscred_PSW")) }
+
+powershell label:'', script:'Invoke-WebRequest -Method GET "http://localhost:8081/repository/java-mvn/com/dev3l/hello_world/mvn-hello-world/1.0-SNAPSHOT/mvn-hello-world-1.0-20230109.132123-4.war"  -ContentType "application/json" -OutFile javamaven.zip -Headers @{ Authorization = "Basic "+ [System.Convert]::ToBase64String([System.Text.Encoding]::ASCII.GetBytes("admin:admin")) }'
+
+ powershell label:'', script:'wget --user=admin --password=admin http://localhost:8081/repository/java-mvn/com%2Fdev3l%2Fhello_world%2Fmvn-hello-world%2F1.0-SNAPSHOT%2Fmvn-hello-world-1.0-20230110.104258-17.war mv mvn-hello-world-1.0-20230110.104258-17.war javamvn.war'
+
+ mv mvn-hello-world-1.0-20230110.104258-17.war javamvn.war
+
+
+
+powershell label:'', script:'Invoke-WebRequest -Method GET "http://localhost:8081/service/rest/v1/search/assets/download?sort=version&repository=java-mvn-CI-repo&maven.groupId=com.dev3l.hello_world&maven.artifactId=mvn-hello-world&maven.baseVersion=1.0-SNAPSHOT&maven.extension=war" -ContentType "application/json" -OutFile HelloWorld.war'
+curl -L -X GET "http://localhost:8081/service/rest/v1/search/assets/download?sort=version&repository=java-mvn-CI-repo&maven.groupId=com.dev3l.hello_world&maven.artifactId=mvn-hello-world&maven.baseVersion=1.0-SNAPSHOT&maven.extension=war" -H "accept: application/json"
+wget -O app-service.jar
+http://localhost:8081/service/rest/v1/search/assets/download?sort=version&repository=java-mvn-CI-repo&maven.groupId=com.dev3l.hello_world&maven.artifactId=mvn-hello-world&maven.baseVersion=1.0-SNAPSHOT&maven.extension=war
+
+http://localhost:8081/service/rest/v1/search/assets/download?sort=version&repository=maven-snapshots&maven.groupId=com.javawebtutor&maven.artifactId=LoginWebApp&maven.extension=war"
+curl -u admin:admin -X GET 'http://localhost:8081/service/rest/v1/search/assets/download?sort=version&repository=java-mvn-CI-repo&maven.groupId=com.dev3l.hello_world&maven.artifactId=mvn-hello-world&maven.extension=war'
+
+new pipeline 
+nexus repo path as a dynamic 
+dont pass the cred manually
