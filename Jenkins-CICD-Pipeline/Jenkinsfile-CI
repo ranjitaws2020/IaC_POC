@@ -57,45 +57,12 @@ pipeline {
                   bat 'del .\\bin\\Publish\\*.pdb'
                 }
             }
-        }
-       
+        }       
         stage('Store war to Nexus') {
             steps{
                 bat 'dotnet pack .\\UploadandDownloadFiles\\UploadandDownloadFiles.csproj'
                 bat 'dotnet nuget push .\\UploadandDownloadFiles\\bin\\Debug\\FileOperation.1.0.0.nupkg -k 2bcfcfe0-5b00-38e1-9086-b9e67205f16d -s http://localhost:8081/repository/dotnet-repo/'
             }
-        }
-        stage('Pull the file off Nexus') {
-            steps{
-               
-                  withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'nexus-user', passwordVariable: 'pw', usernameVariable: 'user']]) {
-                    bat(script: 'curl -L -XGET "http://localhost:8081/repository/dotnet-repo/FileOperation%2F1.0.0" --output FileOperation.nupkg -u %user%:%pw%')
-                  }
-                
-            }
-         }
-        stage('Host app to IIS') {
-            steps {
-               script {
-                    
-                    try {
-                        echo "Stopping App Pool"
-                        bat "%systemroot%\\system32\\inetsrv\\appcmd stop apppool /apppool.name:DefaultAppPool"
-                    }
-                    catch (Exception err) {
-                        echo err.getMessage()
-                    }
-                    
-                    echo "Cleaning the app folder"
-                    bat "del \"C:\\inetpub\\wwwroot\\UploadDowFilesJenkinsPipeline\\**\" /S /Q"
-                    
-                    echo "Copying the published files to the app folder"
-                    bat "xcopy \"C:\\ProgramData\\Jenkins\\.jenkins\\workspace\\DotNetAPI-CICD\\DotNetAPI_CI\\bin\\publish\\**\" \"C:/inetpub/wwwroot/UploadDowFilesJenkinsPipeline\" /E /Q"
-                    
-                    echo "Starting App Pool"
-                    bat "%systemroot%\\system32\\inetsrv\\appcmd start apppool /apppool.name:DefaultAppPool"
-                }
-            }
-        }
+        }      
     }
 }
