@@ -1,6 +1,6 @@
 def call()
 {
-  try {
+                    try {
                         echo "Stopping App Pool"
                         bat "%systemroot%\\system32\\inetsrv\\appcmd stop apppool /apppool.name:DefaultAppPool"
                     }
