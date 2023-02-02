@@ -29,39 +29,45 @@ pipeline {
         stage('Dependencies') {
             steps {
                 script {
-                    bat 'dotnet restore'
+		    RestoreDependencies()
+                    // bat 'dotnet restore'
                 }
             }
         }
         stage('Build'){
             steps {
                 script {
-                  bat 'dotnet build --configuration Release'
+		  BuildSln()
+                 // bat 'dotnet build --configuration Release'
                 }
             }
         }
          stage('SonarQube Analysis') {
             steps{
-                withSonarQubeEnv('sonarqube-8.9.10') {
+	    	SonarAnalysis()
+               // withSonarQubeEnv('sonarqube-8.9.10') {
                     //bat "dotnet tool install --global dotnet-sonarscanner"
-                    bat 'dotnet sonarscanner begin /k:\"dotnet_demo\" /d:sonar.host.url="http://localhost:9000"  /d:sonar.login="b4746c5e910a9def9a7dc53815d216e429e62c31"'
-                    bat 'dotnet build'
-                    bat 'dotnet sonarscanner end /d:sonar.login="b4746c5e910a9def9a7dc53815d216e429e62c31"'
-				}
+                   // bat 'dotnet sonarscanner begin /k:\"dotnet_demo\" /d:sonar.host.url="http://localhost:9000"  /d:sonar.login="b4746c5e910a9def9a7dc53815d216e429e62c31"'
+                    //bat 'dotnet build'
+                    //bat 'dotnet sonarscanner end /d:sonar.login="b4746c5e910a9def9a7dc53815d216e429e62c31"'
+		    
+				//}
 			}
         }
         stage('Publish') {
             steps {
                 script {
-                  bat 'dotnet publish --configuration Release --output .\\bin\\Publish'
-                  bat 'del .\\bin\\Publish\\*.pdb'
+		    PublishApplication()
+                  //bat 'dotnet publish --configuration Release --output .\\bin\\Publish'
+                  //bat 'del .\\bin\\Publish\\*.pdb'
                 }
             }
         }       
         stage('Store war to Nexus') {
             steps{
-                bat 'dotnet pack .\\UploadandDownloadFiles\\UploadandDownloadFiles.csproj'
-                bat 'dotnet nuget push .\\UploadandDownloadFiles\\bin\\Debug\\FileOperation.1.0.0.nupkg -k 2bcfcfe0-5b00-38e1-9086-b9e67205f16d -s http://localhost:8081/repository/dotnet-repo/'
+	    	UploadArtifactToNexus()
+                //bat 'dotnet pack .\\UploadandDownloadFiles\\UploadandDownloadFiles.csproj'
+                //bat 'dotnet nuget push .\\UploadandDownloadFiles\\bin\\Debug\\FileOperation.1.0.0.nupkg -k 2bcfcfe0-5b00-38e1-9086-b9e67205f16d -s http://localhost:8081/repository/dotnet-repo/'
             }
         }      
     }
