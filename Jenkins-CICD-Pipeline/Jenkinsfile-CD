@@ -1,4 +1,4 @@
-@Library('dotnet-shared-library@pipeline') _
+@Library('github.com/ranjitaws2020/dotnet-shared-library@pipeline') _
 
 pipeline {
     agent any
