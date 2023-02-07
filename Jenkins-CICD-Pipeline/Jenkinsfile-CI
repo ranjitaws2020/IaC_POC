@@ -37,14 +37,14 @@ pipeline {
         stage('Build'){
             steps {
                 script {
-		  BuildSln()
+		  BuildApp()
                  // bat 'dotnet build --configuration Release'
                 }
             }
         }
          stage('SonarQube Analysis') {
             steps{
-	    	SonarAnalysis()
+	    	SonarApp()
                // withSonarQubeEnv('sonarqube-8.9.10') {
                     //bat "dotnet tool install --global dotnet-sonarscanner"
                    // bat 'dotnet sonarscanner begin /k:\"dotnet_demo\" /d:sonar.host.url="http://localhost:9000"  /d:sonar.login="b4746c5e910a9def9a7dc53815d216e429e62c31"'
@@ -57,7 +57,7 @@ pipeline {
         stage('Publish') {
             steps {
                 script {
-		    PublishApplication()
+		    PublishApp()
                   //bat 'dotnet publish --configuration Release --output .\\bin\\Publish'
                   //bat 'del .\\bin\\Publish\\*.pdb'
                 }
@@ -65,7 +65,7 @@ pipeline {
         }       
         stage('Store war to Nexus') {
             steps{
-	    	UploadArtifactToNexus()
+	    	StoreToNexus()
                 //bat 'dotnet pack .\\UploadandDownloadFiles\\UploadandDownloadFiles.csproj'
                 //bat 'dotnet nuget push .\\UploadandDownloadFiles\\bin\\Debug\\FileOperation.1.0.0.nupkg -k 2bcfcfe0-5b00-38e1-9086-b9e67205f16d -s http://localhost:8081/repository/dotnet-repo/'
             }
