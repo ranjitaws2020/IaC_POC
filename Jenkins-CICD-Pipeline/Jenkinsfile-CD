@@ -1,3 +1,5 @@
+@Library('dotnet-shared-library@pipeline') _
+
 pipeline {
     agent any
 
