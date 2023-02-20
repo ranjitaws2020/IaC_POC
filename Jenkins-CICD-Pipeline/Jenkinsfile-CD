@@ -2,45 +2,18 @@
 
 pipeline {
     agent any
-
-      environment {     
-        nexuscred = credentials('nexus-user')       
-        NEXUS_VERSION = "nexus3"        
-       }
       tools {       
         jdk 'java_jdk'
       }
     stages {
     	stage('Pull the file off Nexus') {
             steps{
-               DownloadFromNexus()
-                 // withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'nexus-user', passwordVariable: 'pw', usernameVariable: 'user']]) {
-                  //  bat(script: 'curl -L -XGET "http://localhost:8081/repository/dotnet-repo/FileOperation%2F1.0.0" --output FileOperation.nupkg -u %user%:%pw%')
-                 // }
-                
+                DownloadFromNexus()                
             }
          }
         stage('Host app to IIS') {
-            steps {
-               script {
-                    DeployToIIS()
-                   // try {
-                     //   echo "Stopping App Pool"
-                       // bat "%systemroot%\\system32\\inetsrv\\appcmd stop apppool /apppool.name:DefaultAppPool"
-                    //}
-                    //catch (Exception err) {
-                      //  echo err.getMessage()
-                    //}
-                    
-                    //echo "Cleaning the app folder"
-                    //bat "del \"C:\\inetpub\\wwwroot\\UploadDowFilesJenkinsPipeline\\**\" /S /Q"
-                    
-                    //echo "Copying the published files to the app folder"
-                    //bat "xcopy \"C:\\ProgramData\\Jenkins\\.jenkins\\workspace\\DotNetAPI-CICD\\DotNetAPI_CI\\bin\\publish\\**\" \"C:/inetpub/wwwroot/UploadDowFilesJenkinsPipeline\" /E /Q"
-                    
-                    //echo "Starting App Pool"
-                    //bat "%systemroot%\\system32\\inetsrv\\appcmd start apppool /apppool.name:DefaultAppPool"
-                }
+            steps{
+                 DeployToIIS()
             }
         }
     }
