@@ -3,7 +3,7 @@
 pipeline {
     agent any
       environment {
-       sonarlogin = credentials('sonarqube-token')
+       sonarlogin = credentials('dotnet-sonar-token')
        }
       tools {        
         jdk 'java_jdk'
@@ -21,7 +21,7 @@ pipeline {
         }
          stage('SonarQube Analysis') {
             steps{
-	    	SonarApp()
+	    	SonarApp(sonarlogin)
 	    }
         }
         stage('Publish') {
